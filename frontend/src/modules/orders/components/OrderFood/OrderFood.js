@@ -3,8 +3,8 @@ import { Container, Row, Col, Button, Card, Image, CardTitle } from 'react-boots
 import { useNavigate, useLocation } from "react-router-dom";
 import './OrderFood.css'; 
 import axios from 'axios';
-import smallPopcorns from '../../../../assets/snacks/bap-rang-bo-nho.png';
-import bigPopcorns from '../../../../assets/snacks/bap-rang-bo-lon.png';
+import smallPopcorns from '../../../../assets/snacks/baprangbo-nho.png';
+import bigPopcorns from '../../../../assets/snacks/baprangbo-lon.png';
 import smallDrink from '../../../../assets/snacks/nuoc-ngot-nho.png';
 import bigDrink from '../../../../assets/snacks/nuoc-ngot-lon.png';
 
