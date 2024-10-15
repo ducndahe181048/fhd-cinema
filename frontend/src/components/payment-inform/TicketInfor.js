@@ -5,11 +5,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function Ticket() {
   const navigate = useNavigate();
-  const { state } = useLocation();  // Lấy dữ liệu state từ OrderFood
+  const { state } = useLocation();  
   const { selectedSeats, showtimeDetails, movieTitle, totalPrice, snacks, moviePosterUrl } = state || {}; // Nhận dữ liệu từ state
 
   function handleButtonClick() {  
-    navigate("/");  // Điều hướng về trang chủ hoặc trang khác khi người dùng nhấn nút
+    navigate("/");  
   }
 
   return (
