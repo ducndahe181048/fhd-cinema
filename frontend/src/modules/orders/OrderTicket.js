@@ -88,6 +88,7 @@ const OrderTicket = (props) => {
 
                 <FilmTime movieDetails={movieDetails}
                  moviePosterUrl={movieDetails?.moviePosterUrl}/>
+                
                 <div className="white-image">
                     <img src="https://bhdstar.vn/wp-content/uploads/2024/09/Rectangle-27.png" />
                 </div>
