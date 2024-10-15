@@ -25,7 +25,7 @@ const SeatSelection = () => {
     useEffect(() => {
         const fetchSeatsAndShowtimeDetails = async () => {
             try {
-                const seatResponse = await axios.get(`http://localhost:8080/seats?showtimeId=${showtimeId}`);
+                const seatResponse = await axios.get(`http://localhost:8080/seats`);
                 const seatData = seatResponse.data;
                 if (seatData?.data) {
                     const allSeats = seatData.data.slice(0, 60);
