@@ -653,7 +653,7 @@
 // export default LoginPage;
 
 import React, { useState } from "react";
-import { loginApi } from "../../components/services/UserService";
+import { fetchToken, loginApi } from "../../components/services/UserService";
 import { Button, Toast, ToastContainer } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Register from "./Register";
@@ -683,45 +683,21 @@ const LoginPage = () => {
     toast.success("login success");
     event.preventDefault();
 
-    // try {
-    //   // Gửi yêu cầu đăng nhập
-    //   let response = await loginApi(accountName, accountPassword);
-
-    //   // Kiểm tra phản hồi từ API
-    //   if (response && response.data && response.data.token) {
-    //     console.log("Đăng nhập thành công!");
-
-    //     // Lưu token và thông tin xác thực thực sự
-    //     let data = {
-    //       isAuthentiaction: true,
-    //       token: response.data.token, // Lấy token thực sự từ phản hồi API
-    //     };
-    //     sessionStorage.setItem("account", JSON.stringify(data));
-    //     navigate("/users"); // Chuyển hướng đến trang người dùng
-    //   } else {
-    //     setToastMessage("Thông tin đăng nhập không hợp lệ");
-    //     setShowToast(true);
-    //   }
-    // } catch (error) {
-    //   console.error("Lỗi đăng nhập:", error);
-    //   setToastMessage("Đăng nhập thất bại. Vui lòng thử lại.");
-    //   setShowToast(true);
-    // }
-
     try {
-      // Gửi yêu cầu đăng nhập với accountName và accountPassword
+      // Gửi yêu cầu đăng nhập
       let response = await loginApi(accountName, accountPassword);
+      let response2 = await fetchToken();
 
-      // Nếu đăng nhập thành công, server sẽ trả về thông tin xác thực
-      if (response && response.data) {
+      // Kiểm tra phản hồi từ API
+      if (response && response.data && response.data.token) {
         console.log("Đăng nhập thành công!");
-        let data = {
-          isAuthentiaction: true,
-          token: "fake token",
-        };
 
-        // Lưu thông tin người dùng (có thể là userID hoặc sessionID) vào sessionStorage
-        sessionStorage.setItem("account", JSON.stringify(response.data));
+        // Lưu token và thông tin xác thực thực sự
+        let data = {
+          isAuthentiaction: response.authenticated,
+          token: response2.data.token, // Lấy token thực sự từ phản hồi API
+        };
+        sessionStorage.setItem("account", JSON.stringify(data));
         navigate("/users"); // Chuyển hướng đến trang người dùng
       } else {
         setToastMessage("Thông tin đăng nhập không hợp lệ");
@@ -732,6 +708,31 @@ const LoginPage = () => {
       setToastMessage("Đăng nhập thất bại. Vui lòng thử lại.");
       setShowToast(true);
     }
+
+  //   try {
+  //     // Gửi yêu cầu đăng nhập với accountName và accountPassword
+  //     let response = await loginApi(accountName, accountPassword);
+
+  //     // Nếu đăng nhập thành công, server sẽ trả về thông tin xác thực
+  //     if (response && response.data) {
+  //       console.log("Đăng nhập thành công!");
+  //       let data = {
+  //         isAuthentiaction: true,
+  //         token: "fake token",
+  //       };
+
+  //       // Lưu thông tin người dùng (có thể là userID hoặc sessionID) vào sessionStorage
+  //       sessionStorage.setItem("account", JSON.stringify(response.data));
+  //       navigate("/users"); // Chuyển hướng đến trang người dùng
+  //     } else {
+  //       setToastMessage("Thông tin đăng nhập không hợp lệ");
+  //       setShowToast(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi đăng nhập:", error);
+  //     setToastMessage("Đăng nhập thất bại. Vui lòng thử lại.");
+  //     setShowToast(true);
+  //   } 
   };
 
   return (
