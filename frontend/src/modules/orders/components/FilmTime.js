@@ -1,10 +1,12 @@
 // FilmTime.js
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { fetchShowTime } from '../../../components/services/UserService';
 
 
-const FilmTime = ({ movieDetails, moviePosterUrl }) => {
+const FilmTime = () => {
+    const location = useLocation();
+    const { movieDetails, moviePosterUrl } = location.state || {};
     const navigate = useNavigate();
     const { showtimeId } = useParams(); // Lấy movieId từ URL
     const [showTimes, setShowTimes] = useState([]);
@@ -14,7 +16,7 @@ const FilmTime = ({ movieDetails, moviePosterUrl }) => {
 
     // Hàm điều hướng đến trang chọn ghế với showtimeId và showTimeAt
     const goToSeatSelection = (showtimeId) => {
-        navigate('/seatSelection', { state: { showtimeId, movieDetails, moviePosterUrl } });
+        navigate('/seat-selection', { state: { showtimeId, movieDetails, moviePosterUrl } });
     };
     useEffect(() => {
         const getShowTimes = async () => {

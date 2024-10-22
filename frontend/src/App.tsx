@@ -79,8 +79,8 @@ import LoginPage from "./modules/auth/LoginPage";
 import FilmDetails from "./modules/film-details/FilmDetails";
 import OrderTicket from "./modules/orders/OrderTicket";
 import TicketInfor from "./components/payment-inform/TicketInfor";
-import OrderFood from "./modules/orders/components/OrderFood/OrderFood";
-import FilmTime from "./components/FilmTime";
+// import OrderFood from "./modules/orders/components/OrderSnack/OrderFood";
+import FilmTime from "./modules/orders/components/FilmTime";
 import Home from "./components/Home";
 import News from "./modules/news/News";
 import _ from "lodash";
@@ -89,6 +89,7 @@ import NewsDeatils from "./modules/news/NewsDeatils";
 import { ToastContainer, Bounce } from "react-toastify";
 import Stores from "./modules/stores/Stores";
 import ForgetPassword from "./modules/auth/ForgetPassword";
+import SeatSelection from "./components/Seats/SeatSelection";
 
 function App() {
   // login
@@ -111,8 +112,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/description/:movieId" element={<FilmDetails />} />
         <Route path="/orderTicket/:movieId" element={<OrderTicket />} />
-        {/* <Route path="/seat-selection" element={<SeatSelection />} /> */}
-        <Route path="/orderfood" element={<OrderFood />} />
+        <Route path="/film/:movieId/showtimes" element={<FilmTime />} />
+        <Route path="/seat-selection" element={<SeatSelection />} />
+        {/* <Route path="/order-snacks" element={<OrderFood />} /> */}
         <Route path="/ticketInfor" element={<TicketInfor />} />
         <Route path="/users" element={<Users />} />
         <Route path="/news" element={<News />} />
