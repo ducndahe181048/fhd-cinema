@@ -69,8 +69,8 @@
 // }
 
 // export default App;
-
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import NavBar from "./modules/cores/NavBar";
 import Footer from "./modules/cores/Footer";
@@ -78,8 +78,8 @@ import { Routes, Route } from "react-router-dom";
 import LoginPage from "./modules/auth/LoginPage";
 import FilmDetails from "./modules/film-details/FilmDetails";
 import OrderTicket from "./modules/orders/OrderTicket";
-import TicketInfor from "./components/payment-inform/TicketInfor";
-// import OrderFood from "./modules/orders/components/OrderSnack/OrderFood";
+import TicketInfor from "./components/payment-infor/TicketInfor";
+import OrderFood from "./modules/orders/components/OrderSnack/OrderFood";
 import FilmTime from "./modules/orders/components/FilmTime";
 import Home from "./components/Home";
 import News from "./modules/news/News";
@@ -90,6 +90,7 @@ import { ToastContainer, Bounce } from "react-toastify";
 import Stores from "./modules/stores/Stores";
 import ForgetPassword from "./modules/auth/ForgetPassword";
 import SeatSelection from "./components/Seats/SeatSelection";
+import Checkout from "./components/payment-infor/Checkout";
 
 function App() {
   // login
@@ -112,9 +113,10 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/description/:movieId" element={<FilmDetails />} />
         <Route path="/orderTicket/:movieId" element={<OrderTicket />} />
-        <Route path="/film/:movieId/showtimes" element={<FilmTime />} />
+        {/* <Route path="/film/:movieId/showtimes" element={<FilmTime />} /> */}
         <Route path="/seat-selection" element={<SeatSelection />} />
-        {/* <Route path="/order-snacks" element={<OrderFood />} /> */}
+        <Route path="/order-snacks" element={<OrderFood />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/ticketInfor" element={<TicketInfor />} />
         <Route path="/users" element={<Users />} />
         <Route path="/news" element={<News />} />
