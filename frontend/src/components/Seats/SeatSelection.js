@@ -7,7 +7,7 @@ import './SeatSelection.css';
 import PricingDetails from './PricingDetails';
 import seatMapHeader from '../../assets/seats/seatMapHeader.png';
 import SeatDescription from './SeatDescription';
-
+import OrderTicket from '../../modules/orders/OrderTicket';
 const SeatSelection = () => {
     const location = useLocation();
     const { showtimeId, movieDetails } = location.state || {};
@@ -96,7 +96,8 @@ const SeatSelection = () => {
     return (
         <Container fluid>
             
-            <Card.Title className="text-title mt-4">BƯỚC 2: CHỌN GHẾ</Card.Title>
+            <Card.Title className="text-center mt-4" style={{ fontSize: '1.9rem', fontWeight: 'bold' }}>BƯỚC 2: CHỌN GHẾ</Card.Title>
+            {/* <OrderTicket/> */}
             <Row>
                 <Col xs={12} lg={8} className="seat-selection-column d-flex flex-column">
                     <Col xs={12} lg={12} className="mb-3">

@@ -13,7 +13,7 @@ const PricingSummary = ({
   // discount, // Phần giảm giá
   // selectedVoucher // Voucher đã chọn
 }) => (
-  <Card className="pricing-details p-3 shadow-sm ">
+  <Card className="pricing-column p-3 shadow-sm ">
     <Card.Title className="film-title-price">{movieTitle}</Card.Title>
     <h6 className="cinema-title">{showtimeDetails.screen.cinema.cinemaName}</h6>
     <p className="time-title-price">
