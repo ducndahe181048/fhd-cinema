@@ -4,9 +4,10 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { fetchShowTime } from '../../../components/services/UserService';
 
 
-const FilmTime = () => {
-    const location = useLocation();
-    const { movieDetails, moviePosterUrl } = location.state || {};
+const FilmTime = ({movieDetails}) => {
+    // const location = useLocation();
+    // const { movieDetails } = location.state || {};  
+
     const navigate = useNavigate();
     const { showtimeId } = useParams(); // Lấy movieId từ URL
     const [showTimes, setShowTimes] = useState([]);
@@ -16,8 +17,10 @@ const FilmTime = () => {
 
     // Hàm điều hướng đến trang chọn ghế với showtimeId và showTimeAt
     const goToSeatSelection = (showtimeId) => {
-        navigate('/seat-selection', { state: { showtimeId, movieDetails, moviePosterUrl } });
+        
+        navigate('/seat-selection', { state: { showtimeId, movieDetails } });
     };
+    
     useEffect(() => {
         const getShowTimes = async () => {
             try {
