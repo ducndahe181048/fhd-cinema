@@ -3,22 +3,24 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
 import SeatLayout from './SeatLayout';
-
+import './SeatSelection.css';
 import PricingDetails from './PricingDetails';
 import seatMapHeader from '../../assets/seats/seatMapHeader.png';
 import SeatDescription from './SeatDescription';
-// import OrderTicket from '../../../../../../backup19/src/modules/orders/OrderTicket';
 
 const SeatSelection = () => {
     const location = useLocation();
-    const { showtimeId, movieDetails, moviePosterUrl } = location.state || {};
+    const { showtimeId, movieDetails } = location.state || {};
+    console.log( movieDetails);
     const navigate = useNavigate();
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [seatLayout, setSeatLayout] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showtimeDetails, setShowtimeDetails] = useState(null);
-    const [movieTitle] = useState(movieDetails?.movieTitle || "");
+    const [movieTitle] = useState(movieDetails?.movieTitle || 'Unknown Movie Title');
+    const [moviePosterUrl] = useState(movieDetails?.moviePosterUrl || '');
+
 
     useEffect(() => {
         const fetchSeatsAndShowtimeDetails = async () => {
@@ -113,6 +115,7 @@ const SeatSelection = () => {
                         selectedSeats={selectedSeats}
                         getTotalPrice={getTotalPrice}
                         goToOrderFood={goToOrderFood}
+                        moviePosterUrl={moviePosterUrl}
                     />
                 </Col>
             </Row>
