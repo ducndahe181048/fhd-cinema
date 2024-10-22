@@ -9,17 +9,34 @@ const SeatLayout = ({ seatLayout, selectedSeats, onSeatClick }) => {
 
     
     // Split the VIP seats into two groups (rows)
-    const vipFirstRow = vipSeats.slice(0, 16);
-    const vipSecondRow = vipSeats.slice(16, 35); // First 6 seats for row 1
+    const vipFirstRow = vipSeats.slice(0, 10);
+    const vipSecondRow = vipSeats.slice(10, 21); 
+    // const vipThirdRow = vipSeats.slice(21, 35); // First 6 seats for row 1
     // const vipSecondRow = vipSeats.slice(17, 35); // Middle 4 seats (after moving two seats)
 
+    const normalFirstRow = normalSeats.slice(0, 8);
+    const normalSecondRow = normalSeats.slice(8,20);
 
+
+    const coupleFirstRow = coupleSeats.slice(0, 8);
+    const coupleSecondRow = coupleSeats.slice(8, 20);
 
     return (
         <div className="fixed-height-container">
             {/* Regular Seats (Single row, no wrapping) */}
             <div className="regular-seats">
-                {normalSeats.map((seat, index) => (
+                {normalFirstRow.map((seat, index) => (
+                    <Seat
+                        key={index}
+                        seat={seat}
+                        isSelected={selectedSeats.some(selected => selected.seatId === seat.seatId)}
+                        onClick={onSeatClick}
+                    />
+                ))}
+            </div>
+
+            <div className="regular-seats">
+                {normalSecondRow.map((seat, index) => (
                     <Seat
                         key={index}
                         seat={seat}
@@ -53,8 +70,20 @@ const SeatLayout = ({ seatLayout, selectedSeats, onSeatClick }) => {
                 ))}
             </div>
 
+
+            {/* <div className="vip-seats">
+                {vipThirdRow.map((seat, index) => (
+                    <Seat
+                        key={index}
+                        seat={seat}
+                        isSelected={selectedSeats.some(selected => selected.seatId === seat.seatId)}
+                        onClick={onSeatClick}
+                    />
+                ))}
+            </div> */}
+
             <div className="couple-seats">
-                {coupleSeats.map((seat, index) => (
+                {coupleFirstRow.map((seat, index) => (
                     <Seat
                         key={index}
                         seat={seat}
