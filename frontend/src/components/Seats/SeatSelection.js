@@ -90,7 +90,7 @@ const SeatSelection = () => {
     }
 
     const goToOrderFood = () => {
-        navigate('/order-snacks', { state: { selectedSeats, showtimeDetails, movieTitle, moviePosterUrl } });
+        navigate('/order-snacks', { state: { selectedSeats, showtimeDetails, movieDetails } });
     };
 
     return (
