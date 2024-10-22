@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 
-const PricingDetails = ({ movieTitle, showtimeDetails, selectedSeats, getTotalPrice, goToOrderFood }) => {
+
+const PricingDetails = ({ movieTitle, showtimeDetails, selectedSeats, getTotalPrice, goToOrderFood}) => {
+
+    // const [movieTitle] = useState(movieDetails?.movieTitle || 'Unknown Movie Title');
+    // const [moviePosterUrl] = useState(movieDetails?.moviePosterUrl || '');
+
     const getGroupedSeatsByType = () => {
         return selectedSeats.reduce((acc, seat) => {
             const type = seat.seatType.seatTypeName;
@@ -14,7 +19,7 @@ const PricingDetails = ({ movieTitle, showtimeDetails, selectedSeats, getTotalPr
     };
 
     return (
-        <div className="pricing-details p-3 shadow-sm ">
+        <div className="pricing-details p-3 shadow-sm">
             {showtimeDetails && (
                 <div>
                     <h4 className="film-title-price">{movieTitle}</h4>
@@ -31,21 +36,29 @@ const PricingDetails = ({ movieTitle, showtimeDetails, selectedSeats, getTotalPr
                     </p>
                 </div>
             )}
-            <div>
-                {Object.entries(getGroupedSeatsByType()).map(([seatType, seats]) => (
-                    <div key={seatType}>
-                        <p>
-                            <strong>{seats.length} x {seatType}</strong>
-                        </p>
-                        <p>{seats.map(seat => seat.seatName).join(', ')}</p>
-                    </div>
-                ))}
-            </div>
+
+            {selectedSeats.length > 0 ? (
+                <div className="seats-pricing">
+                    {Object.entries(getGroupedSeatsByType()).map(([seatType, seats]) => (
+                        <div key={seatType}>
+                            <p>
+                                <strong>{seats.length} x {seatType}</strong>
+                            </p>
+                            <p>{seats.map(seat => seat.seatName).join(', ')}</p>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p>No seats selected</p>
+            )}
+
             <hr />
+
             <p className="total-price">
                 Total Price:{' '}
                 {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(getTotalPrice())}
             </p>
+
             <Button variant="success" block onClick={goToOrderFood}>
                 CHỌN ĐỒ ĂN (2/4)
             </Button>
