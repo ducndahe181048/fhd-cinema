@@ -12,7 +12,7 @@ import Youtube from "./Youtube";
 
 // import YouTube from 'react-youtube';
 
-const OrderTicket = (props) => {
+const OrderTicket = () => {
   const navigate = useNavigate();
 
   function handleButtonClick() {
@@ -34,7 +34,7 @@ const OrderTicket = (props) => {
     }
   };
 
-  console.log(movieDetails);
+  // console.log(movieDetails);
 
   return (
     <div>
@@ -86,8 +86,7 @@ const OrderTicket = (props) => {
 
         <Youtube />
 
-        <FilmTime movieDetails={movieDetails}
-                 moviePosterUrl={movieDetails?.moviePosterUrl}/>
+        <FilmTime movieDetails={movieDetails} />
 
         <VisaBanner />
       </div>
