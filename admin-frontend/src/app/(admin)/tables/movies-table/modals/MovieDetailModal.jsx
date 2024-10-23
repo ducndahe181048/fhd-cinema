@@ -5,7 +5,21 @@ import { MovieContext } from '../context/MovieContext'
 function MovieDetailModal({ movieId, show, onHide }) {
   const { state } = useContext(MovieContext)
   const [detailShow, setDetailShow] = useState(false)
-  const [selectedMovie, setSelectedMovie] = useState({})
+  const [selectedMovie, setSelectedMovie] = useState({
+    ratingName: '',
+    movieTitle: '',
+    movieGenre: '',
+    movieDirector: '',
+    movieReleaseDate: '',
+    movieTrailerUrl: '',
+    movieDescription: '',
+    movieLanguage: '',
+    moviePosterUrl: '',
+    movieCast: '',
+    movieStatus: '',
+    movieFormat: '',
+    movieDurationMinute: 0,
+  })
 
   useEffect(() => {
     setDetailShow(show)
@@ -14,14 +28,42 @@ function MovieDetailModal({ movieId, show, onHide }) {
   useEffect(() => {
     if (movieId) {
       const movie = state.movies.find((movie) => movie.movieId === movieId)
-      setSelectedMovie(movie)
+      setSelectedMovie({
+        ratingName: movie.rating.ratingName,
+        movieTitle: movie.movieTitle,
+        movieGenre: movie.movieGenre,
+        movieDirector: movie.movieDirector,
+        movieReleaseDate: movie.movieReleaseDate,
+        movieTrailerUrl: movie.movieTrailerUrl,
+        movieDescription: movie.movieDescription,
+        movieLanguage: movie.movieLanguage,
+        moviePosterUrl: movie.moviePosterUrl,
+        movieCast: movie.movieCast,
+        movieStatus: movie.movieStatus,
+        movieFormat: movie.movieFormat,
+        movieDurationMinute: movie.movieDurationMinute,
+      })
     }
   }, [movieId])
 
   const closeDetailShow = () => {
     onHide()
     setDetailShow(false)
-    setSelectedMovie({})
+    setSelectedMovie({
+      ratingName: '',
+      movieTitle: '',
+      movieGenre: '',
+      movieDirector: '',
+      movieReleaseDate: '',
+      movieTrailerUrl: '',
+      movieDescription: '',
+      movieLanguage: '',
+      moviePosterUrl: '',
+      movieCast: '',
+      movieStatus: '',
+      movieFormat: '',
+      movieDurationMinute: 0,
+    })
   }
 
   return (
@@ -31,6 +73,10 @@ function MovieDetailModal({ movieId, show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         <Form id="detailForm">
+        <Form.Group className="m-2">
+            <Form.Label>Rating</Form.Label>
+            <Form.Control readOnly type="text" value={selectedMovie.ratingName} />
+          </Form.Group>
           <Form.Group className="m-2">
             <Form.Label>Movie Title</Form.Label>
             <Form.Control readOnly type="text" value={selectedMovie.movieTitle} />
