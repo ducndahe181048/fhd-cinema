@@ -166,7 +166,7 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
     }
   }, [showtimeId, state.showtimes]);
 
-  // Set individual form field values
+  // Handle form field changes
   const setField = (field, value) => {
     setForm({
       ...form,
@@ -249,42 +249,48 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
           <Form.Group className="m-2">
             <Form.Label>Movie</Form.Label>
             <Form.Select
-              value={form.movieId || ''}
+              required
               onChange={(e) => setField('movieId', e.target.value)}
-              isInvalid={!!errors.movieId}
+              value={form.movieId}
               className="bg-body text-dark border-secondary"
+              isInvalid={!!errors.movieId}
             >
-              <option value="">Choose...</option>
-              {movies.map((movie) => (
-                <option key={movie.id} value={movie.id}>
-                  {movie.movieTitle}
-                </option>
-              ))}
+              <option value="">Select movie</option>
+              {state.movies.length ? (
+                state.movies.map((movie) => (
+                  <option key={movie.movieId} value={movie.movieId}>
+                    {movie.movieTitle}
+                  </option>
+                ))
+              ) : (
+                <option value="">No movies available</option>
+              )}
             </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              {errors.movieId}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.movieId}</Form.Control.Feedback>
           </Form.Group>
 
           {/* Screen Id */}
           <Form.Group className="m-2">
             <Form.Label>Screen</Form.Label>
             <Form.Select
-              value={form.screenId || ''}
+              required
+              value={form.screenId}
+              className="bg-body text-dark border-secondary"
               onChange={(e) => setField('screenId', e.target.value)}
               isInvalid={!!errors.screenId}
-              className="bg-body text-dark border-secondary"
             >
-              <option value="">Choose...</option>
-              {screens.map((screen) => (
-                <option key={screen.id} value={screen.id}>
-                  {screen.screenName} - {screen.cinema.cinemaName} - {screen.cinema.location.locationName}
-                </option>
-              ))}
+              <option value="">Select Screen</option>
+              {state.screens.length ? (
+                state.screens.map((screen) => (
+                  <option key={screen.screenId} value={screen.screenId}>
+                    {screen.screenName} - {screen.cinema.cinemaName} - {screen.cinema.location.locationName}
+                  </option>
+                ))
+              ) : (
+                <option value="">No screens available</option>
+              )}
             </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              {errors.screenId}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{errors.screenId}</Form.Control.Feedback>
           </Form.Group>
 
           {/* Showtime Price */}

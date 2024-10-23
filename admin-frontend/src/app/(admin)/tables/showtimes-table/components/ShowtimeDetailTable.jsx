@@ -286,17 +286,30 @@ const ShowtimeDetailTable = () => {
       ),
     },
     {
-      header: 'Showtime At',
-      accessorKey: 'showtimeAt',
+      header: 'Movie Id',
+      accessorKey: 'movieId',
+    },
+    {
+      header: 'Screen - Cinema Name',
+      assessorKey: 'screenNameAndCinemaName',
+      cell: ({ row }) => `${row.original.screen.screenName} - ${row.original.screen.cinema.cinemaName}`,
     },
     {
       header: 'Showtime Price',
       accessorKey: 'showtimePrice',
     },
     {
-      header: 'Cinema Name',
-      accessorKey: 'screen.cinema.cinemaName',
+      header: 'Showtime At',
+      accessorKey: 'showtimeAt',
     },
+    // {
+    //   header: 'Cinema Name',
+    //   accessorKey: 'screen.cinema.cinemaName',
+    // },
+    // {
+    //   header: 'Screen Name',
+    //   accessorKey: 'screen.screenName',
+    // },
     {
       id: 'update',
       header: 'Update',

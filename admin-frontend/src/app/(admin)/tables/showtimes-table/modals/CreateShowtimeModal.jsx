@@ -8,7 +8,7 @@ function CreateShowtimeModal({ show, fetchShowtimes, onHide }) {
     setCreateShow(show)
   }, [show])
 
-  const [form, setForm] = useState({ showtimePrice: '', showtimeAt: '' })
+  const [form, setForm] = useState({ movieId: '', screenId: '', showtimePrice: '', showtimeAt: '' })
   const [movies, setMovies] = useState([])
   const [screens, setScreens] = useState([])
   const [validated, setValidated] = useState(false)
@@ -43,15 +43,17 @@ function CreateShowtimeModal({ show, fetchShowtimes, onHide }) {
   const closeCreateShow = () => {
     onHide()
     setCreateShow(false)
-    setForm({ showtimeName: '', showtimePassword: '', showtimeType: '' })
+    setForm({ movieId: '', screenId: '', showtimePrice: '', showtimeAt: '' })
     setValidated(false)
     setErrors({})
   }
 
   const validateForm = () => {
     const newErrors = {}
-    if (!form.showtimeName) newErrors.showtimeName = 'Showtime name is required'
-    if (!form.showtimeType) newErrors.showtimeType = 'Showtime type is required'
+    if (!form.movieId) newErrors.movieId = 'Movie id is required'
+    if (!form.screenId) newErrors.screenId = 'Showtime type is required'
+    if (!form.showtimePrice) newErrors.showtimePrice = 'Showtime price is required'
+    if (!form.showtimeAt) newErrors.showtimeAt = 'Showtime at is required'
     return newErrors
   }
 
@@ -82,7 +84,7 @@ function CreateShowtimeModal({ show, fetchShowtimes, onHide }) {
         })
       setCreateShow(false)
       onHide()
-      setForm({ showtimeName: '', showtimePassword: '', showtimeType: '' })
+      setForm({ movieId: '', screenId: '', showtimePrice: '', showtimeAt: '' })
       setErrors({})
     }
     setValidated(true)

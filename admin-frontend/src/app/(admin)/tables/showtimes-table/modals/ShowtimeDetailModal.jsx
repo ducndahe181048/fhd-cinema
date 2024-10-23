@@ -6,12 +6,8 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
   const { state } = useContext(ShowtimeContext)
   const [detailShow, setDetailShow] = useState(false)
   const [selectedShowtime, setSelectedShowtime] = useState({
-    movie: {
-      movieTitle: '',
-    },
-    screen: {
-      screenName: '',
-    },
+    movieId: '',
+    screenName: '',
     showtimePrice: '',
     showtimeAt: '',
   })
@@ -23,7 +19,12 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
   useEffect(() => {
     if (showtimeId) {
       const showtime = state.showtimes.find((showtime) => showtime.showtimeId === showtimeId)
-      setSelectedShowtime(showtime)
+      setSelectedShowtime({
+        movieId: showtime.movieId,
+        screenName: showtime.screen.screenName,
+        showtimePrice: showtime.showtimePrice,
+        showtimeAt: showtime.showtimeAt,
+      })
     }
   }, [showtimeId])
 
@@ -31,12 +32,8 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
     onHide()
     setDetailShow(false)
     setSelectedShowtime({
-      movie: {
-        movieTitle: '',
-      },
-      screen: {
-        screenName: '',
-      },
+      movieId: '',
+      screenName: '',
       showtimePrice: '',
       showtimeAt: '',
     })
@@ -49,18 +46,31 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         <Form id="detailForm">
+
+          {/* Movie Title */}
           <Form.Group className="m-2">
+            <Form.Label>Movie Title</Form.Label>
+            <Form.Control readOnly type="text" value={selectedShowtime.movieId} />
+          </Form.Group>
+
+          {/* Screen Name */}
+          {/* <Form.Group className="m-2">
             <Form.Label>Screen Name</Form.Label>
             <Form.Control readOnly type="text" value={selectedShowtime.screen.screenName} />
-          </Form.Group>
+          </Form.Group> */}
+
+          {/* Showtime Price */}
           <Form.Group className="m-2">
             <Form.Label>Showtime Price</Form.Label>
             <Form.Control readOnly type="text" value={selectedShowtime.showtimePrice} />
           </Form.Group>
+
+          {/* Showtime At */}
           <Form.Group className="m-2">
             <Form.Label>Showtime At</Form.Label>
             <Form.Control readOnly type="text" value={selectedShowtime.showtimeAt} />
           </Form.Group>
+
         </Form>
       </Modal.Body>
       <Modal.Footer></Modal.Footer>

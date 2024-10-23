@@ -102,6 +102,7 @@ const pageSize = 10; // Số lượng phần tử trên mỗi trang
 
 const initialState = {
   showtimes: [],
+  movies: [],
   cinemas: [],
   screens: [],
   query: '',
@@ -121,6 +122,8 @@ const reducer = (state, action) => {
         console.error('Expected payload to be an array, but received:', action.payload);
       }
       return { ...state, showtimes: Array.isArray(action.payload) ? action.payload : [] };
+    case 'SET_MOVIES':
+      return { ...state, movies: action.payload };
     case 'SET_CINEMAS':
       return { ...state, cinemas: action.payload };
     case 'SET_SCREENS':
