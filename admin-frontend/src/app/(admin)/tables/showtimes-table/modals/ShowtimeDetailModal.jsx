@@ -6,7 +6,14 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
   const { state } = useContext(ShowtimeContext)
   const [detailShow, setDetailShow] = useState(false)
   const [selectedShowtime, setSelectedShowtime] = useState({
-    showtimeName: '',
+    movie: {
+      movieTitle: '',
+    },
+    screen: {
+      screenName: '',
+    },
+    showtimePrice: '',
+    showtimeAt: '',
   })
 
   useEffect(() => {
@@ -24,7 +31,14 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
     onHide()
     setDetailShow(false)
     setSelectedShowtime({
-      showtimeName: '',
+      movie: {
+        movieTitle: '',
+      },
+      screen: {
+        screenName: '',
+      },
+      showtimePrice: '',
+      showtimeAt: '',
     })
   }
 
@@ -36,8 +50,16 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
       <Modal.Body>
         <Form id="detailForm">
           <Form.Group className="m-2">
-            <Form.Label>Showtime Name</Form.Label>
-            <Form.Control readOnly type="text" value={selectedShowtime.showtimeName} />
+            <Form.Label>Screen Name</Form.Label>
+            <Form.Control readOnly type="text" value={selectedShowtime.screen.screenName} />
+          </Form.Group>
+          <Form.Group className="m-2">
+            <Form.Label>Showtime Price</Form.Label>
+            <Form.Control readOnly type="text" value={selectedShowtime.showtimePrice} />
+          </Form.Group>
+          <Form.Group className="m-2">
+            <Form.Label>Showtime At</Form.Label>
+            <Form.Control readOnly type="text" value={selectedShowtime.showtimeAt} />
           </Form.Group>
         </Form>
       </Modal.Body>

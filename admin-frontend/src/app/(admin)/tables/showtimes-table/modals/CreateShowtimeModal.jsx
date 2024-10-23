@@ -8,7 +8,7 @@ function CreateShowtimeModal({ show, fetchShowtimes, onHide }) {
     setCreateShow(show)
   }, [show])
 
-  const [form, setForm] = useState({ showtimeName: '', showtimeType: '' })
+  const [form, setForm] = useState({ showtimePrice: '', showtimeAt: '' })
   const [movies, setMovies] = useState([])
   const [screens, setScreens] = useState([])
   const [validated, setValidated] = useState(false)
@@ -113,6 +113,7 @@ function CreateShowtimeModal({ show, fetchShowtimes, onHide }) {
               {errors.movieId}
             </Form.Control.Feedback>
           </Form.Group>
+          
           <Form.Group controlId="formScreen">
             <Form.Label>Screen</Form.Label>
             <Form.Select
@@ -132,18 +133,34 @@ function CreateShowtimeModal({ show, fetchShowtimes, onHide }) {
               {errors.screenId}
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group controlId="formShowtimeName">
-            <Form.Label>Showtime Name</Form.Label>
+
+          <Form.Group controlId="formShowtimePrice">
+            <Form.Label>Showtime Price</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter showtime name"
-              value={form.showtimeName}
-              onChange={(e) => setField('showtimeName', e.target.value)}
-              isInvalid={!!errors.showtimeName}
+              placeholder="Enter showtime price"
+              value={form.showtimePrice}
+              onChange={(e) => setField('showtimePrice', e.target.value)}
+              isInvalid={!!errors.showtimePrice}
               className="bg-body text-dark border-secondary"
             />
             <Form.Control.Feedback type="invalid">
-              {errors.showtimeName}
+              {errors.showtimePrice}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="formShowtimeAt">
+            <Form.Label>Showtime At</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter showtime at"
+              value={form.showtimeAt}
+              onChange={(e) => setField('showtimeAt', e.target.value)}
+              isInvalid={!!errors.showtimeAt}
+              className="bg-body text-dark border-secondary"
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.showtimeAt}
             </Form.Control.Feedback>
           </Form.Group>
         </Form>
