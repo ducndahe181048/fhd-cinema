@@ -37,6 +37,10 @@ const MovieDetailTable = () => {
       accessorKey: 'movieStatus',
     },
     {
+      header: 'Movie Rating',
+      accessorKey: 'rating.ratingDescription',
+    },
+    {
       id: 'update',
       header: 'Update',
       cell: ({
