@@ -102,9 +102,6 @@ const pageSize = 10; // Số lượng phần tử trên mỗi trang
 
 const initialState = {
   showtimes: [],
-  movies: [],
-  cinemas: [],
-  screens: [],
   query: '',
   filters: [],
   currentPage: 1,
@@ -122,12 +119,6 @@ const reducer = (state, action) => {
         console.error('Expected payload to be an array, but received:', action.payload);
       }
       return { ...state, showtimes: Array.isArray(action.payload) ? action.payload : [] };
-    case 'SET_MOVIES':
-      return { ...state, movies: action.payload };
-    case 'SET_CINEMAS':
-      return { ...state, cinemas: action.payload };
-    case 'SET_SCREENS':
-      return { ...state, screens: action.payload };
     case 'SET_QUERY':
       return { ...state, query: action.payload };
     case 'SET_FILTERS':
@@ -159,40 +150,37 @@ export const ShowtimeProvider = ({ children }) => {
     return `http://localhost:8080/showtimes?${params.toString()}`;
   };
 
+  const fetchMoviesForShowtimes = async (showtimes) => {
+    const updatedShowtimes = await Promise.all(
+      showtimes.map(async (showtime) => {
+        const movieResponse = await fetch(`http://localhost:8080/movies/${showtime.movieId}`);
+        const movieData = await movieResponse.json();
+        const movie = movieData.data;
+        showtime.movie = movie;
+        console.log(showtime);
+        debugger
+      })
+    );
+    return updatedShowtimes;
+  };
+
   const fetchShowtimes = () => {
     const apiUrl = buildApiUrl();
     fetch(apiUrl)
       .then((response) => response.json())
-      .then((json) => {
-        if (json && json.data && Array.isArray(json.data.result)) {
-          dispatch({ type: 'SET_SHOWTIMES', payload: json.data.result });
+      .then(async(json) => {
+          const showtimesWithMovies = await fetchMoviesForShowtimes(json.data.result);
+          console.log(showtimesWithMovies);
+          debugger
+          dispatch({ type: 'SET_SHOWTIMES', payload: showtimesWithMovies });
           dispatch({ type: 'SET_TOTAL_PAGES', payload: Math.ceil(json.data.count / pageSize) });
-        } else {
-          console.error('Expected json.data.result to be an array, but received:', json.data);
         }
-      })
+      )
       .catch((error) => console.error('Error fetching showtimes:', error));
-  };
-
-  const fetchCinemas = () => {
-    const cinemaApiUrl = `http://localhost:8080/cinemas`;
-    fetch(cinemaApiUrl)
-      .then((response) => response.json())
-      .then((json) => dispatch({ type: 'SET_CINEMAS', payload: json.data }))
-      .catch((error) => console.error('Error fetching cinemas:', error));
-  };
-
-  const fetchScreen = () => {
-    const screenApiUrl = `http://localhost:8080/screens`;
-    fetch(screenApiUrl)
-      .then((response) => response.json())
-      .then((json) => dispatch({ type: 'SET_SCREENS', payload: json.data }))
-      .catch((error) => console.error('Error fetching screens:', error));
   };
 
   const updateQueryParams = (params) => {
     const searchParams = new URLSearchParams(location.search);
-
     Object.keys(params).forEach((key) => {
       if (params[key] !== undefined) {
         searchParams.set(key, params[key]);
@@ -217,8 +205,6 @@ export const ShowtimeProvider = ({ children }) => {
 
   useEffect(() => {
     fetchShowtimes();
-    fetchScreen();
-    fetchCinemas();
   }, [state.currentPage, state.query, state.filters]);
 
   return (

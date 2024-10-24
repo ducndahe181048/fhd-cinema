@@ -262,19 +262,6 @@ const ShowtimeDetailTable = () => {
   const [showDetailModal, setShowDetailModal] = useState({ showtimeId: null, show: false });
   const [showCreateModal, setShowCreateModal] = useState({ show: false });
 
-  useEffect(() => {
-    // Gọi fetchShowtimes lần đầu khi component được render
-    fetchShowtimes({ 
-      page: state.currentPage, 
-      pageSize: state.pageSize, 
-      query: state.query, 
-      cinemas: state.filters.join(','),
-      screens: state.filters.join(','),
-      sortBy: 'showtimePrice', 
-      sortDirection: 'DESC' 
-    });
-  }, [state.currentPage, state.query, state.filters]);
-
   const columns = [
     {
       id: 'detail',
@@ -286,8 +273,8 @@ const ShowtimeDetailTable = () => {
       ),
     },
     {
-      header: 'Movie Id',
-      accessorKey: 'movieId',
+      header: 'Movie Title',
+      accessorKey: 'movie.movieTitle',
     },
     {
       header: 'Screen - Cinema Name',
@@ -365,7 +352,7 @@ const ShowtimeDetailTable = () => {
           </Card>
         </Col>
       </Row>
-      <DeleteShowtimeModal
+      {/* <DeleteShowtimeModal
         showtimeId={showDeleteModal.showtimeId}
         show={showDeleteModal.show}
         fetchShowtimes={fetchShowtimes}
@@ -386,7 +373,7 @@ const ShowtimeDetailTable = () => {
         showtimeId={showDetailModal.showtimeId}
         show={showDetailModal.show}
         onHide={() => setShowDetailModal({ showtimeId: null, show: false })}
-      />
+      /> */}
     </Container>
   );
 };
