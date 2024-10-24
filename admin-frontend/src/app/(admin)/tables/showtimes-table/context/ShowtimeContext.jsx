@@ -150,33 +150,36 @@ export const ShowtimeProvider = ({ children }) => {
     return `http://localhost:8080/showtimes?${params.toString()}`;
   };
 
-  const fetchMoviesForShowtimes = async (showtimes) => {
-    const updatedShowtimes = await Promise.all(
-      showtimes.map(async (showtime) => {
-        const movieResponse = await fetch(`http://localhost:8080/movies/${showtime.movieId}`);
-        const movieData = await movieResponse.json();
-        const movie = movieData.data;
-        showtime.movie = movie;
-        console.log(showtime);
-        debugger
-      })
-    );
-    return updatedShowtimes;
-  };
+  const updateShowtimesWithMovie = (showtimes) => {
+    const showtimesWithMovie = Promise.all(showtimes.map(async (showtime) => {
+      try {
+      const response = await fetch(`http://localhost:8080/movies/${showtime.movieId}`);
+      const json = await response.json();
+      delete showtime.movieId;
+      return { ...showtime, movie: json.data };
+      } catch (error) {
+      console.error('Error fetching movie:', error);
+      return { ...showtime, movie: null };
+      }
+    }));
+    return showtimesWithMovie;
+  }
 
-  const fetchShowtimes = () => {
+  const fetchShowtimes = async () => {
     const apiUrl = buildApiUrl();
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then(async(json) => {
-          const showtimesWithMovies = await fetchMoviesForShowtimes(json.data.result);
-          console.log(showtimesWithMovies);
-          debugger
-          dispatch({ type: 'SET_SHOWTIMES', payload: showtimesWithMovies });
-          dispatch({ type: 'SET_TOTAL_PAGES', payload: Math.ceil(json.data.count / pageSize) });
-        }
-      )
-      .catch((error) => console.error('Error fetching showtimes:', error));
+    try {
+      const response = await fetch(apiUrl);
+      const json = await response.json();
+      if (json && json.data && Array.isArray(json.data.result)) {
+        const showtimesWithMovie = await updateShowtimesWithMovie(json.data.result);
+        dispatch({ type: 'SET_SHOWTIMES', payload: showtimesWithMovie });
+        dispatch({ type: 'SET_TOTAL_PAGES', payload: Math.ceil(json.data.count / pageSize) });
+      } else {
+        console.error('Expected json.data.result to be an array, but received:', json.data);
+      }
+    } catch (error) {
+      console.error('Error fetching showtimes:', error);
+    }
   };
 
   const updateQueryParams = (params) => {
