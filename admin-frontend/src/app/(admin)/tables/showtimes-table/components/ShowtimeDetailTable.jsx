@@ -286,8 +286,8 @@ const ShowtimeDetailTable = () => {
       ),
     },
     {
-      header: 'Movie Id',
-      accessorKey: 'movieId',
+      header: 'Movie Title',
+      accessorKey: 'movie.movieTitle',
     },
     {
       header: 'Screen - Cinema Name',
@@ -365,6 +365,7 @@ const ShowtimeDetailTable = () => {
           </Card>
         </Col>
       </Row>
+      {/*}
       <DeleteShowtimeModal
         showtimeId={showDeleteModal.showtimeId}
         show={showDeleteModal.show}
@@ -387,6 +388,7 @@ const ShowtimeDetailTable = () => {
         show={showDetailModal.show}
         onHide={() => setShowDetailModal({ showtimeId: null, show: false })}
       />
+      */}
     </Container>
   );
 };
