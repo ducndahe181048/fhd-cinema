@@ -289,14 +289,6 @@ const ShowtimeDetailTable = () => {
       header: 'Showtime At',
       accessorKey: 'showtimeAt',
     },
-    // {
-    //   header: 'Cinema Name',
-    //   accessorKey: 'screen.cinema.cinemaName',
-    // },
-    // {
-    //   header: 'Screen Name',
-    //   accessorKey: 'screen.screenName',
-    // },
     {
       id: 'update',
       header: 'Update',
@@ -358,12 +350,12 @@ const ShowtimeDetailTable = () => {
         show={showDeleteModal.show}
         fetchShowtimes={fetchShowtimes}
         onHide={() => setShowDeleteModal({ showtimeId: null, show: false })}
-      />
-      <CreateShowtimeModal
+      /> */}
+      {/* <CreateShowtimeModal
         show={showCreateModal.show}
         fetchShowtimes={fetchShowtimes}
         onHide={() => setShowCreateModal({ show: false })}
-      />
+      /> */}
       <UpdateShowtimeModal
         showtimeId={showUpdateModal.showtimeId}
         show={showUpdateModal.show}
@@ -375,7 +367,6 @@ const ShowtimeDetailTable = () => {
         show={showDetailModal.show}
         onHide={() => setShowDetailModal({ showtimeId: null, show: false })}
       />
-      */}
     </Container>
   );
 };

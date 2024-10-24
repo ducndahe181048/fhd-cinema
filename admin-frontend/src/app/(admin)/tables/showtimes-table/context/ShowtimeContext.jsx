@@ -150,16 +150,17 @@ export const ShowtimeProvider = ({ children }) => {
     return `http://localhost:8080/showtimes?${params.toString()}`;
   };
 
+  // Update showtime with movie
   const updateShowtimesWithMovie = (showtimes) => {
     const showtimesWithMovie = Promise.all(showtimes.map(async (showtime) => {
       try {
-      const response = await fetch(`http://localhost:8080/movies/${showtime.movieId}`);
-      const json = await response.json();
-      delete showtime.movieId;
-      return { ...showtime, movie: json.data };
+        const response = await fetch(`http://localhost:8080/movies/${showtime.movieId}`);
+        const json = await response.json();
+        delete showtime.movieId;
+        return { ...showtime, movie: json.data };
       } catch (error) {
-      console.error('Error fetching movie:', error);
-      return { ...showtime, movie: null };
+        console.error('Error fetching movie:', error);
+        return { ...showtime, movie: null };
       }
     }));
     return showtimesWithMovie;
@@ -184,6 +185,7 @@ export const ShowtimeProvider = ({ children }) => {
 
   const updateQueryParams = (params) => {
     const searchParams = new URLSearchParams(location.search);
+
     Object.keys(params).forEach((key) => {
       if (params[key] !== undefined) {
         searchParams.set(key, params[key]);
