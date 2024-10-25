@@ -219,7 +219,7 @@ function ShowtimeDetailModal({ showtimeId, show, onHide }) {
         const showtime = state.showtimes.find((showtime) => showtime.showtimeId === showtimeId)
         setSelectedShowtime({
           movieTitle: showtime.movie.movieTitle,
-          screenName: showtime.screen.screenName,
+          screenName: showtime.screen.screenName + ' - ' + showtime.screen.cinema.cinemaName,
           showtimePrice: showtime.showtimePrice,
           showtimeAt: showtime.showtimeAt,
         })
