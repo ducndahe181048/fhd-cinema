@@ -19,7 +19,7 @@ const convertTime = (time) => {
   if (!time) return ''; // Return an empty string if time is undefined or null
 
   const [datePart, timePart] = time.split("T");
-  
+
   if (!datePart || !timePart) {
     console.error("Invalid datetime format:", time);
     return time; // Return original time if splitting fails
@@ -95,6 +95,34 @@ export const ShowtimeProvider = ({ children }) => {
     return showtimesWithMovie;
   }
 
+  const fetchMovies = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/movies');
+      const json = await response.json();
+      if (json && json.data) {
+        dispatch({ type: 'SET_MOVIES', payload: json.data }); // Cập nhật movies vào state
+      } else {
+        console.error('Expected json.data to be an array, but received:', json);
+      }
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+    }
+  };
+
+  const fetchScreens = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/screens');
+      const json = await response.json();
+      if (json && json.data) {
+        dispatch({ type: 'SET_SCREENS', payload: json.data }); // Cập nhật screens vào state
+      } else {
+        console.error('Expected json.data to be an array, but received:', json);
+      }
+    } catch (error) {
+      console.error('Error fetching screens:', error);
+    }
+  };
+
   const fetchShowtimes = async () => {
     const apiUrl = buildApiUrl();
     try {
@@ -139,6 +167,8 @@ export const ShowtimeProvider = ({ children }) => {
 
   useEffect(() => {
     fetchShowtimes();
+    fetchMovies();
+    fetchScreens();
   }, [state.currentPage, state.query, state.filters]);
 
   return (
@@ -149,5 +179,3 @@ export const ShowtimeProvider = ({ children }) => {
     </ShowtimeContext.Provider>
   );
 };
-
-ShowtimeContext.jsx
