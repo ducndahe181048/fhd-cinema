@@ -7,7 +7,7 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
 
   const [updateShow, setUpdateShow] = useState(false)
 
-  const [form, setForm] = useState({ movieId: '', screenId: '', showtimePrice: '', showtimeAt: '' })
+  const [form, setForm] = useState({ movieId: '', screenId: '', showtimePrice: 0, showtimeAt: '' })
   const [validated, setValidated] = useState(false)
   const [errors, setErrors] = useState({})
 
@@ -15,13 +15,33 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
     setUpdateShow(show)
   }, [show])
 
+  // Hàm chuyển đổi từ dd/MM/yyyy HH:mm sang định dạng datetime-local (YYYY-MM-DDTHH:MM)
+  const toDatetimeLocal = (time) => {
+    if (!time) return '';
+
+    const [datePart, timePart] = time.split(" ");
+    const [day, month, year] = datePart.split("/").map(Number);
+    const [hours, minutes] = timePart.split(":").map(Number);
+
+    const date = new Date(year, month - 1, day, hours, minutes);
+    return date.toISOString().slice(0, 16); // Định dạng YYYY-MM-DDTHH:MM
+  };
+
+
   // setForm by showtimeId
   useEffect(() => {
     if (showtimeId) {
       const showtime = state.showtimes.find((showtime) => showtime.showtimeId === showtimeId)
-      setForm(showtime)
+      if (showtime) {
+        setForm({
+          movieId: showtime.movie.movieId,
+          screenId: showtime.screen.screenId,
+          showtimePrice: showtime.showtimePrice,
+          showtimeAt: toDatetimeLocal(showtime.showtimeAt)
+        })
+      }
     }
-  }, [showtimeId])
+  }, [showtimeId, state.showtimes])
 
   const setField = (field, value) => {
     setForm({
@@ -41,7 +61,7 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
   const closeUpdateShow = () => {
     onHide()
     setUpdateShow(false)
-    setForm({ movieId: '', screenId: '', showtimePrice: '', showtimeAt: '' })
+    setForm({ movieId: '', screenId: '', showtimePrice: 0, showtimeAt: '' })
     setValidated(false)
     setErrors({})
   }
@@ -54,13 +74,12 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
       setErrors(newErrors)
       e.stopPropagation()
     } else {
-      const { movieId, screenId, showtimePrice, showtimeAt, ...updateData } = form
       fetch(`http://localhost:8080/showtimes/${showtimeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(updateData),
+        body: JSON.stringify(form),
       })
         .then((response) => {
           if (response.ok) {
@@ -74,7 +93,7 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
         })
       setUpdateShow(false)
       onHide()
-      setForm({ movieId: '', screenId: '', showtimePrice: '', showtimeAt: '' })
+      setForm({ movieId: '', screenId: '', showtimePrice: 0, showtimeAt: '' })
       setErrors({})
     }
     setValidated(true)
@@ -91,7 +110,7 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
             <Form.Select
               required
               name="movieId"
-              onChange={(e) => setField('movieId', Number(e.target.value))}
+              onChange={(e) => setField('movieId', e.target.value)}
               className="bg-body text-dark border-secondary"
               value={form.movieId}
               isInvalid={!!errors.movieId}>
@@ -104,21 +123,24 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
             </Form.Select>
             <Form.Control.Feedback type="invalid">{errors.movieId}</Form.Control.Feedback>
           </Form.Group>
-          {/* <Form.Group className="m-2">
+          <Form.Group className="m-2">
             <Form.Label>Screen Name</Form.Label>
             <Form.Select
               required
-              name="screenName"
-              onChange={(e) => setField('screenName', Number(e.target.value))}
+              name="screenId"
+              onChange={(e) => setField('screenId', e.target.value)}
               className="bg-body text-dark border-secondary"
-              value={form.screenName}
-              isInvalid={!!errors.screenName}>
+              value={form.screenId}
+              isInvalid={!!errors.screenId}>
               <option value="">Select screen</option>
-              <option value={1}>Customer</option>
-              <option value={2}>Staff</option>
+              {state.screens.map((screen) => (
+                <option key={screen.screenId} value={screen.screenId}>
+                  {screen.screenName} - {screen.cinema.cinemaName} - {screen.cinema.location.locationName}
+                </option>
+              ))}
             </Form.Select>
-            <Form.Control.Feedback type="invalid">{errors.screenName}</Form.Control.Feedback>
-          </Form.Group> */}
+            <Form.Control.Feedback type="invalid">{errors.screenId}</Form.Control.Feedback>
+          </Form.Group>
           <Form.Group className="m-2">
             <Form.Label>Showtime Price</Form.Label>
             <Form.Control
@@ -136,7 +158,7 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
             <Form.Label>Showtime At</Form.Label>
             <Form.Control
               required
-              type="text"
+              type="datetime-local"
               onChange={(e) => setField('showtimeAt', e.target.value)}
               placeholder="Showtime at"
               name="showtimeAt"
@@ -151,7 +173,7 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
         <Button variant="secondary" onClick={() => closeUpdateShow()}>
           Close
         </Button>
-        <Button variant="primary" type="submit" form="updateForm">
+        <Button variant="primary" type="submit" form="updateForm" onClick={handleUpdate}>
           Save Changes
         </Button>
       </Modal.Footer>
@@ -160,7 +182,6 @@ function UpdateShowtimeModal({ showtimeId, show, fetchShowtimes, onHide }) {
 }
 
 export default UpdateShowtimeModal
-
 
 // import React, { useState, useEffect, useContext } from 'react';
 // import { Modal, Form, Button } from 'react-bootstrap';
@@ -171,8 +192,8 @@ export default UpdateShowtimeModal
 
 //   const [updateShow, setUpdateShow] = useState(false);
 //   const [form, setForm] = useState({
-//     movieTitle: '',
-//     screenName: '',
+//     movieId: '',
+//     screenId: '',
 //     showtimePrice: 0,
 //     showtimeAt: '',
 //   });
@@ -189,16 +210,16 @@ export default UpdateShowtimeModal
 //       const showtime = state.showtimes.find((showtimeItem) => showtimeItem.showtimeId === showtimeId);
 //       if (showtime) {
 //         setForm({
-//           movieTitle: showtime.movie.movieTitle,
-//           screenName: showtime.screen.screenName,
+//           movieId: showtime.movie?.movieId || '',
+//           screenId: showtime.screen.screenId,
 //           showtimePrice: showtime.showtimePrice,
 //           showtimeAt: showtime.showtimeAt,
 //         });
 //       }
 //     }
-//   }, [showtimeId]);
+//   }, [showtimeId, state.showtimes]);
 
-//   // Handle form field changes
+//   // Set individual form field values
 //   const setField = (field, value) => {
 //     setForm({
 //       ...form,
@@ -209,8 +230,8 @@ export default UpdateShowtimeModal
 //   // Validate form before submission
 //   const validateForm = () => {
 //     const newErrors = {};
-//     if (!form.movieTitle) newErrors.movieId = 'Movie title is required';
-//     if (!form.screenName) newErrors.screenId = 'Screen name is required';
+//     if (!form.movieId) newErrors.movieId = 'Movie is required';
+//     if (!form.screenId) newErrors.screenId = 'Screen is required';
 //     if (!form.showtimePrice) newErrors.showtimePrice = 'Showtime price is required';
 //     if (!form.showtimeAt) newErrors.showtimeAt = 'Showtime at is required';
 //     return newErrors;
@@ -220,7 +241,7 @@ export default UpdateShowtimeModal
 //   const closeUpdateShow = () => {
 //     onHide();
 //     setUpdateShow(false);
-//     setForm({ movieTitle: '', screenName: '', showtimePrice: 0, showtimeAt: '' });
+//     setForm({ movieId: '', screenId: '', showtimePrice: 0, showtimeAt: '', });
 //     setValidated(false);
 //     setErrors({});
 //   };
@@ -237,11 +258,11 @@ export default UpdateShowtimeModal
 //     } else {
 //       // Prepare the data for the update request
 //       const updateData = {
-//         movieTitle: form.movieTitle,
-//         screenName: form.screenName,
+//         movieId: form.movieId,
+//         screenId: form.screenId,
+//         showtimeId: showtimeId,
 //         showtimePrice: form.showtimePrice,
 //         showtimeAt: form.showtimeAt,
-//         showtimeId: showtimeId,
 //       };
 
 //       // Perform the PUT request to update the showtime
@@ -256,7 +277,7 @@ export default UpdateShowtimeModal
 //           if (response.ok) {
 //             fetchShowtimes();  // Refresh the showtime list after update
 //           } else {
-//             console.error('Failed to update the showtime');
+//             console.error('Failed to update the movie');
 //           }
 //         })
 //         .catch((error) => {
@@ -277,57 +298,51 @@ export default UpdateShowtimeModal
 //       <Modal.Body>
 //         <Form noValidate validated={validated} onSubmit={handleUpdate} id="updateForm">
 
-//           {/* Movie Title */}
+//           {/* Movie */}
 //           <Form.Group className="m-2">
 //             <Form.Label>Movie</Form.Label>
 //             <Form.Select
 //               required
+//               name="movieId"
 //               onChange={(e) => setField('movieId', e.target.value)}
-//               value={form.movieId}
 //               className="bg-body text-dark border-secondary"
+//               value={form.movieId}
 //               isInvalid={!!errors.movieId}
 //             >
 //               <option value="">Select movie</option>
-//               {state.movies.length ? (
-//                 state.movies.map((movie) => (
-//                   <option key={movie.movieId} value={movie.movieId}>
-//                     {movie.movieTitle}
-//                   </option>
-//                 ))
-//               ) : (
-//                 <option value="">No movies available</option>
-//               )}
+//               {state.movies.map((movie) => (
+//                 <option key={movie.movieId} value={movie.movieId}>
+//                   {movie.movieTitle}
+//                 </option>
+//               ))}
 //             </Form.Select>
 //             <Form.Control.Feedback type="invalid">{errors.movieId}</Form.Control.Feedback>
 //           </Form.Group>
 
-//           {/* Screen Id */}
+//           {/* Screen */}
 //           <Form.Group className="m-2">
 //             <Form.Label>Screen</Form.Label>
 //             <Form.Select
 //               required
-//               value={form.screenId}
-//               className="bg-body text-dark border-secondary"
+//               name="screenId"
 //               onChange={(e) => setField('screenId', e.target.value)}
+//               className="bg-body text-dark border-secondary"
+//               value={form.screenId}
 //               isInvalid={!!errors.screenId}
 //             >
-//               <option value="">Select Screen</option>
-//               {state.screens.length ? (
-//                 state.screens.map((screen) => (
-//                   <option key={screen.screenId} value={screen.screenId}>
-//                     {screen.screenName} - {screen.cinema.cinemaName} - {screen.cinema.location.locationName}
-//                   </option>
-//                 ))
-//               ) : (
-//                 <option value="">No screens available</option>
-//               )}
+//               <option value="">Select screen</option>
+//               {state.screens.map((screen) => (
+//                 <option key={screen.screenId} value={screen.screenId}>
+//                   {screen.screenName}
+//                 </option>
+//               ))}
 //             </Form.Select>
 //             <Form.Control.Feedback type="invalid">{errors.screenId}</Form.Control.Feedback>
 //           </Form.Group>
 
-//           {/* Showtime Price */}
+//           {/* Showtime price */}
 //           <Form.Group className="m-2">
-//             <Form.Label>Showtime price</Form.Label>
+//             <Form.Label>Showtime Price</Form.Label>
 //             <Form.Control
 //               required
 //               type="text"
