@@ -282,11 +282,17 @@ function UpdateMovieModal({ movieId, show, fetchMovies, onHide }) {
               isInvalid={!!errors.ratingId}
             >
               <option value="">Select movie rating</option>
-              <option value="3cdbbb96-73e0-11ef-ab6e-0242ac110001">P</option>
+              {/* <option value="3cdbbb96-73e0-11ef-ab6e-0242ac110001">P</option>
               <option value="3cdbc1a0-73e0-11ef-ab6e-0242ac110002">K</option>
               <option value="3cdbc2e2-73e0-11ef-ab6e-0242ac110003">T13</option>
               <option value="3cdbc369-73e0-11ef-ab6e-0242ac110004">T16</option>
-              <option value="3cdbc3ee-73e0-11ef-ab6e-0242ac110005">T18</option>
+              <option value="3cdbc3ee-73e0-11ef-ab6e-0242ac110005">T18</option> */}
+
+              {state.ratings.map((rating) => (
+                <option key={rating.ratingId} value={rating.ratingId}>
+                  {rating.ratingName}
+                </option>
+              ))}
             </Form.Select>
             <Form.Control.Feedback type="invalid">{errors.ratingId}</Form.Control.Feedback>
           </Form.Group>
