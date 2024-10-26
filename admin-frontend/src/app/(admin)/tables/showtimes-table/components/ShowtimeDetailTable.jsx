@@ -344,18 +344,17 @@ const ShowtimeDetailTable = () => {
           </Card>
         </Col>
       </Row>
-      {/*}
       <DeleteShowtimeModal
         showtimeId={showDeleteModal.showtimeId}
         show={showDeleteModal.show}
         fetchShowtimes={fetchShowtimes}
         onHide={() => setShowDeleteModal({ showtimeId: null, show: false })}
-      /> */}
-      {/* <CreateShowtimeModal
+      />
+      <CreateShowtimeModal
         show={showCreateModal.show}
         fetchShowtimes={fetchShowtimes}
         onHide={() => setShowCreateModal({ show: false })}
-      /> */}
+      />
       <UpdateShowtimeModal
         showtimeId={showUpdateModal.showtimeId}
         show={showUpdateModal.show}
