@@ -34,7 +34,7 @@ const TicketDetailTable = () => {
       accessorKey: 'ticketId',
     },
     {
-      header: 'Ticket Type',
+      header: 'Ticket Price',
       accessorKey: 'ticketPrice',
     },
     {
@@ -118,6 +118,7 @@ const TicketDetailTable = () => {
       <TicketDetailModal
         ticketId={showDetailModal.ticketId}
         show={showDetailModal.show}
+        fetchTickets={fetchTickets} 
         onHide={() => setShowDetailModal({ ticketId: null, show: false })}
       />
     </Container>

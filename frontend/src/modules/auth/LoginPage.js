@@ -1029,7 +1029,7 @@
 
 
 import React, { useState } from "react";
-import { loginApi } from "../../components/services/UserService"; 
+import { loginApi } from "../../../src/components/services/UserService"; 
 import { Button, Toast, ToastContainer } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -1068,7 +1068,6 @@ const LoginPage = () => {
         
         sessionStorage.setItem("account", JSON.stringify(response.data));
 
-        
         navigate("/users");
       } else {
         setToastMessage("Thông tin đăng nhập không hợp lệ");

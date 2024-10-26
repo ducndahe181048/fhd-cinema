@@ -12,7 +12,9 @@ import jakarta.mail.internet.MimeMessage;
 import com.company.project.common.Status;
 import com.company.project.module.bills.entity.Bill;
 import com.company.project.module.bills.service.BillService;
+import com.company.project.module.customers.common.CustomerStatusMessage;
 import com.company.project.module.customers.entity.Customer;
+import com.company.project.module.customers.exception.CustomerException;
 import com.company.project.module.customers.repository.CustomerRepository;
 import com.company.project.module.customers.service.CustomerService;
 import com.company.project.module.emails.common.EmailStatusMessage;
@@ -66,13 +68,16 @@ public class EmailService {
 
     if (!resource.exists() || !resource.isReadable()) {
       throw new EmailException(
-        Status.FAIL.getValue(),
-        EmailStatusMessage.TEMPLATE_INVALID.getMessage());
+          Status.FAIL.getValue(),
+          EmailStatusMessage.TEMPLATE_INVALID.getMessage());
     }
 
-    Customer customer = customerRepository.findByCustomerEmail(request.getCustomerEmail());
+    Customer customer = customerRepository.findByCustomerEmailAndIsDeletedFalse(request.getCustomerEmail());
+    if (customer == null) {
+      throw new CustomerException(Status.FAIL.getValue(), CustomerStatusMessage.NOT_EMAIL_EXIST.getMessage());
+    }
 
-    String customerId = customer.getCustomerId();
+    String accountId = customer.getAccount().getAccountId();
     String email = request.getCustomerEmail();
     String customerName = customer.getCustomerName();
 
@@ -81,10 +86,33 @@ public class EmailService {
       helper.setSubject("Đặt lại mật khẩu tài khoản của bạn");
 
       Context context = new Context();
-      context.setVariable("customerId", customerId);
+      context.setVariable("accountId", accountId);
       context.setVariable("customerName", customerName);
 
       String htmlContent = templateEngine.process("email-reset-password", context);
+      helper.setText(htmlContent, true);
+      javaMailSender.send(mimeMessage);
+    } catch (MessagingException e) {
+      // TODO: handle exception
+    }
+  }
+
+  public void sendEmailProvideLoginInformation(String email, String username, String password) {
+    MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+    String subject = "Tài khoản và mật khẩu để đăng nhập vào FHD Cinema";
+    String template = "email-login-infor";
+
+    try {
+      helper.setTo(email);
+      helper.setSubject(subject);
+
+      Context context = new Context();
+      context.setVariable("username", username);
+      context.setVariable("password", password);
+
+      String htmlContent = templateEngine.process(template, context);
       helper.setText(htmlContent, true);
       javaMailSender.send(mimeMessage);
     } catch (MessagingException e) {
@@ -101,8 +129,8 @@ public class EmailService {
 
     if (!resource.exists() || !resource.isReadable()) {
       throw new EmailException(
-        Status.FAIL.getValue(),
-        EmailStatusMessage.TEMPLATE_INVALID.getMessage());
+          Status.FAIL.getValue(),
+          EmailStatusMessage.TEMPLATE_INVALID.getMessage());
     }
 
     Bill bill = billService.getBillById(request.getBillId());

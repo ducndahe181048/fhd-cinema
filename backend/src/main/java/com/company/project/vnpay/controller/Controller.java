@@ -1,33 +1,39 @@
 package com.company.project.vnpay.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.company.project.common.ApiResponse;
 import com.company.project.common.Status;
-import com.company.project.module.accounts.dto.response.AccountDto;
 import com.company.project.vnpay.dto.request.TransactionRequest;
 import com.company.project.vnpay.dto.response.TransactionResponse;
 import com.company.project.vnpay.service.VNPayService;
+
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
 @org.springframework.stereotype.Controller
 public class Controller {
     @Autowired
     private VNPayService vnPayService;
 
-    @PostMapping("/submitOrder")
-    public String submidOrder(@RequestBody TransactionRequest transactionRequest,
+    @PostMapping("/vnpay/create-order")
+    public @ResponseBody ResponseEntity<ApiResponse<?>> createVnPayPayment(@RequestBody TransactionRequest transactionRequest,
                             HttpServletRequest request){
-        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String vnpayUrl = vnPayService.createOrder(transactionRequest.getOrderTotal(), transactionRequest.getOrderInfo(), baseUrl);
-        return "redirect:" + vnpayUrl;
+        String vnpayUrl = vnPayService.createOrder(request, transactionRequest.getOrderTotal(), transactionRequest.getOrderInfo(), transactionRequest.getUrlReturn());
+        return ResponseEntity.ok().body(ApiResponse.builder()
+                .status(Status.SUCCESS.getValue())
+                .message("Success")
+                .data(vnpayUrl)
+                .build());
     }
 
+
     @GetMapping("/vnpay-payment")
-    public @ResponseBody ResponseEntity<ApiResponse<TransactionResponse>> GetMapping(HttpServletRequest request){
+    public @ResponseBody ResponseEntity<ApiResponse<TransactionResponse>> getOrderReturn(HttpServletRequest request){
         int paymentStatus =vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
@@ -50,8 +56,8 @@ public class Controller {
                     .build());
         }
         return ResponseEntity.ok().body(ApiResponse.<TransactionResponse>builder()
-                .status(Status.SUCCESS.getValue())
-                .message("Success")
+                .status(Status.FAIL.getValue())
+                .message("Fail")
                 .data(transactionResponse)
                 .build());
     }
