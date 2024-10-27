@@ -66,7 +66,7 @@ public class TicketController {
                     .message(TicketStatusMessage.CREATE_SUCCESS.getMessage())
                     .data(ticketDto)
                     .build());
-  }
+  }-
 
   @PutMapping("/{ticketId}")
   ResponseEntity<ApiResponse<TicketDto>> updateTicket(
