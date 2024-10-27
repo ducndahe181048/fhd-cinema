@@ -35,7 +35,7 @@
 //                     const screenId = showtimeData.data.screen.screenId;
 
 //                     // Gọi API để lấy danh sách ghế dựa trên screenId
-//                     const seatResponse = await axios.get(`http://localhost:8080/seats?screenId=${screenId}`);
+//                     const seatResponse = await axios.get(`http://localhost:8080/seats/screen/screenId=${screenId}`);
 //                     const seatData = seatResponse.data;
 
 //                     if (seatData?.data) {
@@ -263,7 +263,6 @@
 
 // export default SeatSelection;
 
-// 
 
 
 
@@ -292,7 +291,7 @@ import SeatDescription from './SeatDescription';
 
 const SeatSelection = () => {
     const location = useLocation();
-    const { showtimeId, movieDetails } = location.state || {};
+    const { showtimeId, movieDetails, bookingId } = location.state || {};
     const navigate = useNavigate();
 
     const [selectedSeats, setSelectedSeats] = useState([]);
@@ -306,20 +305,18 @@ const SeatSelection = () => {
     useEffect(() => {
         const fetchSeatsAndShowtimeDetails = async () => {
             try {
-                // Lấy thông tin showtime dựa trên showtimeId
                 const showtimeResponse = await axios.get(`http://localhost:8080/showtimes/${showtimeId}`);
                 const showtimeData = showtimeResponse.data;
 
                 if (showtimeData?.data) {
                     setShowtimeDetails(showtimeData.data);
 
-                    // Lấy screenId từ showtimeDetails và gọi API để lấy ghế dựa trên screenId
                     const screenId = showtimeData.data.screen.screenId;
                     const seatResponse = await axios.get(`http://localhost:8080/seats/screen/${screenId}`);
                     const seatData = seatResponse.data;
 
                     if (seatData?.data) {
-                        setSeatLayout(seatData.data); // Đặt dữ liệu ghế
+                        setSeatLayout(seatData.data);
                     } else {
                         setSeatLayout([]);
                         console.error("No seat data found");
@@ -354,6 +351,26 @@ const SeatSelection = () => {
         });
     };
 
+    const createTickets = async () => {
+        for (const seat of selectedSeats) {
+            try {
+                const response = await axios.post('http://localhost:8080/tickets', {
+                    seatId: seat.seatId,
+                    bookingId: bookingId
+                });
+                
+                const ticketId = response.data?.data?.ticketId;
+                if (ticketId) {
+                    console.log(`Ticket created for seatId ${seat.seatId}: Ticket ID = ${ticketId}`);
+                }
+            } catch (error) {
+                console.error(`Failed to create ticket for seatId ${seat.seatId}`, error);
+            }
+        }
+        
+        navigate('/order-snacks', { state: { selectedSeats, showtimeDetails, movieDetails } });
+    };
+
     const getTotalPrice = () => {
         if (!showtimeDetails) return 0;
         const ticketPrice = showtimeDetails.showtimePrice;
@@ -371,10 +388,6 @@ const SeatSelection = () => {
     if (error) {
         return <div>{error}</div>;
     }
-
-    const goToOrderFood = () => {
-        navigate('/order-snacks', { state: { selectedSeats, showtimeDetails, movieDetails } });
-    };
 
     return (
         <Container fluid>
@@ -396,7 +409,7 @@ const SeatSelection = () => {
                         showtimeDetails={showtimeDetails}
                         selectedSeats={selectedSeats}
                         getTotalPrice={getTotalPrice}
-                        goToOrderFood={goToOrderFood}
+                        goToOrderFood={createTickets} // Sử dụng `createTickets` để tạo vé và điều hướng
                         moviePosterUrl={moviePosterUrl}
                     />
                 </Col>

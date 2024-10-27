@@ -1,9 +1,5 @@
 package com.company.project.module.tickets.controller;
 
-import java.util.List;
-
-import jakarta.validation.Valid;
-
 import com.company.project.common.ApiPagination;
 import com.company.project.common.ApiResponse;
 import com.company.project.common.Status;
@@ -11,7 +7,8 @@ import com.company.project.module.tickets.common.TicketStatusMessage;
 import com.company.project.module.tickets.dto.request.TicketCreationRequest;
 import com.company.project.module.tickets.dto.response.TicketDto;
 import com.company.project.module.tickets.service.TicketService;
-
+import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -66,7 +63,7 @@ public class TicketController {
                     .message(TicketStatusMessage.CREATE_SUCCESS.getMessage())
                     .data(ticketDto)
                     .build());
-  }-
+  }
 
   @PutMapping("/{ticketId}")
   ResponseEntity<ApiResponse<TicketDto>> updateTicket(
