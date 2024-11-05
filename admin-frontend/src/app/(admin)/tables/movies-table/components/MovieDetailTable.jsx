@@ -217,12 +217,12 @@ const MovieDetailTable = () => {
               {/* Movie Table */}
               <ReactTable columns={columns} data={state.movies} />
               {/* Pagination Controls */}
-              {/* <TablePagination
+              <TablePagination
                 state={state}
                 dispatch={dispatch}
                 fetch={fetchMovies}
                 updateQueryParams={updateQueryParams}
-              /> */}
+              />
             </CardBody>
           </Card>
         </Col>

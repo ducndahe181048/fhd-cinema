@@ -67,19 +67,6 @@ import { SaleContext } from '../context/SaleContext';
 const SearchBar = () => {
   const { state, dispatch, updateQueryParams } = useContext(SaleContext);
 
-  // const handleSearch = (event) => {
-  //   const query = event.target.value;
-  //   dispatch({ type: 'SET_QUERY', payload: query });
-  //   updateQueryParams({ query, page: 1 });
-  // };
-
-  // const handleKeyDown = (event) => {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //     handleSearch(event);
-  //   }
-  // };
-
   const handleCinemaChange = (event) => {
     const selectedCinema = event.target.value;
     if (selectedCinema === 'all') {
@@ -96,17 +83,6 @@ const SearchBar = () => {
   return (
     <Container className="pt-3">
       <Row>
-        {/* <Col md={8}>
-          <FormControl
-            className="p-3 mb-3 rounded"
-            size="lg"
-            type="text"
-            placeholder="Search by movie title"
-            value={state.query}
-            onChange={handleSearch}
-            onKeyDown={handleKeyDown}
-          />
-        </Col> */}
         <Col>
           <Form.Select
             className="p-3 mb-3 rounded bg-body text-dark border-secondary"

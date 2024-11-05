@@ -83,7 +83,6 @@ import TablePagination from '../../tables/common/TablePagination';
 
 const SaleDetailTable = () => {
   const { state, dispatch, fetchSales, updateQueryParams } = useContext(SaleContext);
-  const [showDetailModal, setShowDetailModal] = useState({ movieId: null, show: false });
 
   useEffect(() => {
     fetchSales();

@@ -13,7 +13,6 @@ function App() {
           <>
             <SearchBar />
             <MovieDetailTable />
-            <MoviePagination />
           </>
         } />
       </Routes>
